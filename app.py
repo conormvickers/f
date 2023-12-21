@@ -13,7 +13,7 @@ def set_chrome_options() -> Options:
     """
     path = os.getcwd()
     chrome_options = Options()
-    chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--user-data-dir=" + path + "/selenium")
@@ -38,7 +38,7 @@ backup = [
 
 backupup = [
     ["click", "//*[text()[contains(.,'Text')]]"],
-    ["sms", "//input[@name='code']" ],
+    ["sms", "(//input[@name='code'])[2]" ],
     ["keys", "//input[@name='deviceName']", "dear lord" ],
     ["keys", "//input[@type='password']", "FukYew32" + Keys.ENTER],
 
@@ -62,7 +62,6 @@ if __name__ == "__main__":
             el = driver.find_element(By.XPATH, xpath)
             el.send_keys(command[2])
         elif command[0] == "click":
-            print(command)
             xpath = command[1]
             currentElement = WebDriverWait(driver, 50).until(
                 EC.presence_of_element_located((By.XPATH, xpath))
@@ -80,7 +79,7 @@ if __name__ == "__main__":
             sms = input("SMS Code?")
             xpath = command[1]
             el = driver.find_element(By.XPATH, xpath)
-            print("entering" )
+            print("entering: " )
             print(sms)
             el.send_keys(sms + Keys.ENTER)
             
@@ -98,25 +97,36 @@ if __name__ == "__main__":
             print(e)
             print("checking if can login")
             driver.save_screenshot("error_normal.png")
+            break
 
-            for command in backup:
-                try:
-                    print(command)
-                    execute(command)
-                except Exception as e:
-                    print("!!!!!!!!!!!!!!!!!!!!!!!")
-                    print(e)
-                    driver.save_screenshot("error.png")
-                    for fallback in backupup:
-                        try: 
-                            print(fallback)
-                            execute(fallback)
-                        except:
-                            print("FAILURE")
-                            driver.save_screenshot("damn.png")
+    for command in backup:
+        try:
+            print(command)
+            execute(command)
+        except Exception as e:
+            print("!!!!!!!!!!!!!!!!!!!!!!!")
+            print(e)
+            driver.save_screenshot("error.png")
+            break
+    for fallback in backupup:
+        try: 
+            print(fallback)
+            execute(fallback)
+        except Exception as e:
+            print("!!!!!!!!!!!!!!!!!!!!!!!")
+            print(e)
+            driver.save_screenshot("damn.png")
 
     
     print("===============COMPLETE===============")
-    # Do stuff with your driver
-    input("all done?")
+    # Do stuff with your driver  
+    next = ''
+    while next != "done":
+     next = input("all done?")
+    try: 
+        execute(["keys", next,"aoijef"])
+    except Exception as e:
+        print("!!!!!!!!!!!!!!!!!!!!!!!")
+        print(e)
+
     driver.close()
