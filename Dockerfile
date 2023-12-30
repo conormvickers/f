@@ -19,6 +19,7 @@ WORKDIR /app
 
 COPY app.py /app
 COPY requirements.txt /app
+# COPY selenium/ /app/selenium
 
 RUN pip install --upgrade pip
 
@@ -26,4 +27,4 @@ RUN pip install -r requirements.txt
 
 RUN dir -s
 
-CMD ["python", "app.py"]
+CMD ["python","-u", "app.py"]
